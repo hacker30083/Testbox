@@ -40,24 +40,51 @@ router.post('/:id/setup',  upload.single('Dockerfile')), (req, res) => {
   const dockerfilePath = `uploads/${req.file.filename}`;
 
   // Build the Docker image
-  const buildCommand = spawn(`docker', ['build', '-t', 'testbox:${testbox.id}', '-f', '${dockerfilePath}','.']);
-
+  const buildCommand = spawn("docker", ["build", "-t", "testbox:${testbox.id}", "-f", "${dockerfilePath}", "."]);
   
-exec(buildCommand, (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Error building Docker image: ${error}`);
-    return res.status(500).send('Error building Docker image');
-  } else {
-    console.log(`Docker image built successfully: ${stdout}`);
-    testbox.status = 'TAKEN';
-    res.send('Dockerfile uploaded and built successfully');
-    res.send('Setup completed');
-  }
+  buildCommand.stdout.on('data', (data) => {
+    testbox.logs += data.toString();
+  }); 
 
-spawn(`docker', ['run', 'testbox:${testbox.id}'
-  
-}); 
-};
+  buildCommand.stderr.on('data', (data) => {
+    // Append the build errors to the testbox logs
+    testbox.logs += data.toString();
+  });
+
+  buildCommand.on('close', (code) => {
+    if (code === 0) {
+      // Docker image built successfully
+      // Run the Docker container
+      const runCommand = spawn("docker", ["run", "testbox:${testbox.id}"]);
+
+      runCommand.stdout.on('data', (data) => {
+        // Append the run output to the testbox logs
+        testbox.logs += data.toString();
+      });
+
+      runCommand.stderr.on('data', (data) => {
+        // Append the run errors to the testbox logs
+        testbox.logs += data.toString();
+      });
+
+      runCommand.on('close', (code) => {
+        if (code === 0) {
+          // Docker container started successfully
+          testbox.status = 'TAKEN';
+          res.send('Dockerfile uploaded, built, and started successfully');
+        } else {
+          // Error starting the Docker container
+          testbox.status = 'FAILED';
+          res.status(500).send('Error starting Docker container');
+        }
+      });
+    } else {
+      // Error building the Docker image
+      testbox.status = 'FAILED';
+      res.status(500).send('Error building Docker image');
+    }
+  });  
+}; 
 
 router.post('/:id/fail', (req, res) => {
   const testbox = testboxes.find(tb => tb.id === parseInt(req.params.id));

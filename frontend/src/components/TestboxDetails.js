@@ -16,7 +16,7 @@ const TestboxDetails = () => {
 
   return (
     <div className="testbox-details">
-      <button href="./index.js" target="_blank" rel="noopener noreferrer">back</button>
+      <button href="../index.js" target="_blank" rel="noopener noreferrer">back</button>
       <h1>{testbox.name}</h1>
       <div>Status: {testbox.status}</div>
       <div>Services:</div>
