@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .testbox {
+    background: #34495e;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+  }
+  
+  .testbox .header {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .testbox .status {
+    margin-bottom: 10px;
+  }
+  
+  .testbox.ready {
+    border: 2px solid #2ecc71;
+  }
+  
+  .testbox.pending {
+    border: 2px solid #f39c12;
+  }
+  
+  .testbox.failed {
+    border: 2px solid #e74c3c;
+  }
+  
+  .testbox.taken {
+    border: 2px solid #3498db;
+  }
+  
+  button {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #3498db;
+  }
+  
+  .claim-page,
+  .testbox-details {
+    padding: 20px;
+  }
+  
+  .claim-page h1,
+  .testbox-details h1 {
+    margin-bottom: 20px;
+  }
+  
+  form > div {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="file"],
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #7f8c8d;
+    border-radius: 5px;
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    background: #27ae60;
+  }
+  
+  button[type="submit"]:hover {
+    background: #2ecc71;
+  }
+  
