@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom';
 
 const ClaimPage = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [files, setFiles] = useState(null);
   const [repoUrl, setRepoUrl] = useState('');
 
@@ -29,7 +29,7 @@ const ClaimPage = () => {
     axios.post(`http://localhost:5000/api/testboxes/${id}/setup`, formData)
       .then(response => {
         alert('Testbox setup successfully');
-        history.push(`/testbox/${id}`);
+        navigate(`/testbox/${id}`);
       })
       .catch(error => console.error(error));
   };
