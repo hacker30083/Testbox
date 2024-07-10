@@ -1,3 +1,4 @@
+var spawn = require('child_process').spawn;
 var express = require('express');
 var router = express.Router();
 const multer = require('multer');
@@ -29,16 +30,34 @@ router.post('/:id/claim', (req, res) => {
   res.send(testbox);
 });
 
-router.post('/:id/setup', upload.array('files'), (req, res) => {
+router.post('/:id/setup',  upload.single('Dockerfile')), (req, res) => {
   const { repoUrl } = req.body;
   const testbox = testboxes.find(tb => tb.id === parseInt(req.params.id));
   if (!testbox) return res.status(404).send('Testbox not found');
-  // Simulate setup process
-  setTimeout(() => {
+  
+  
+  // Save the Dockerfile to a temporary location
+  const dockerfilePath = `uploads/${req.file.filename}`;
+
+  // Build the Docker image
+  const buildCommand = spawn(`docker', ['build', '-t', 'testbox:${testbox.id}', '-f', '${dockerfilePath}','.']);
+
+  
+exec(buildCommand, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error building Docker image: ${error}`);
+    return res.status(500).send('Error building Docker image');
+  } else {
+    console.log(`Docker image built successfully: ${stdout}`);
     testbox.status = 'TAKEN';
+    res.send('Dockerfile uploaded and built successfully');
     res.send('Setup completed');
-  }, 2000); // Simulating async setup process
-});
+  }
+
+spawn(`docker', ['run', 'testbox:${testbox.id}'
+  
+}); 
+};
 
 router.post('/:id/fail', (req, res) => {
   const testbox = testboxes.find(tb => tb.id === parseInt(req.params.id));
