@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-scrollbars-custom": "^4.1.1",
+    "react-textarea-autosize": "^8.5.3"
+  }
+}

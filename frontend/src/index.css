@@ -94,4 +94,21 @@ body {
   button[type="submit"]:hover {
     background: #2ecc71;
   }
+
+  .logs-container {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .logs-textarea {
+    width: 100%;
+    padding: 10px;
+    resize: none;
+    border: none;
+    outline: none;
+    font-family: monospace;
+    font-size: 14px;
+  }
   

@@ -1,36 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import TextareaAutosize from 'react-textarea-autosize';
+import { Scrollbar } from 'react-scrollbars-custom';
 
 const TestboxDetails = () => {
   const { id } = useParams();
   const [testbox, setTestbox] = useState(null);
+  const [logs, setLogs] = useState('');
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/testboxes/${id}`)
-      .then(response => setTestbox(response.data))
-      .catch(error => console.error(error));
+    const fetchTestboxDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/testboxes/${id}`);
+        setTestbox(response.data);
+        setLogs(response.data.logs);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchTestboxDetails();
   }, [id]);
 
-  if (!testbox) return <div>Loading...</div>;
+  const handleScrollToBottom = () => {
+    const scrollbarsRef = React.createRef();
+    if (scrollbarsRef.current) {
+      scrollbarsRef.current.scrollToBottom();
+    }
+  };
 
   return (
     <div className="testbox-details">
-      <button href="../index.js" target="_blank" rel="noopener noreferrer">back</button>
-      <h1>{testbox.name}</h1>
-      <div>Status: {testbox.status}</div>
-      <div>Services:</div>
-      <ul>
-        {testbox.services.map(service => (
-          <li key={service.name}>{service.name} - {service.status}</li>
-        ))}
-      </ul>
-      <div>Jobs:</div>
-      <ul>
-        {testbox.jobs.map(job => (
-          <li key={job.name}>{job.name} - {job.status}</li>
-        ))}
-      </ul>
+      <h1>Testbox Details</h1>
+      {testbox && (
+        <div>
+          <p>Name: {testbox.name}</p>
+          <p>Status: {testbox.status}</p>
+          <p>Created At: {testbox.createdAt}</p>
+          <p>Updated At: {testbox.updatedAt}</p>
+          <div className="logs-container">
+            <Scrollbar
+              ref={handleScrollToBottom}
+              style={{ height: 300 }}
+              onScrollStop={handleScrollToBottom}
+            >
+              <TextareaAutosize
+                className="logs-textarea"
+                value={logs}
+                readOnly
+              />
+            </Scrollbar>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
