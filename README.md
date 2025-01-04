@@ -1,2 +1,2 @@
-# Testbox
-Testboxes for quickly creating testing environments and more
+# Testboxes
+Testboxes, for quickly creating and managing testing environments.
