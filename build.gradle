@@ -1,0 +1,4 @@
+allprojects {
+    group = 'hacker30083.testboxes'
+    version = '0.1'
+}
